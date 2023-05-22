@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.UploadActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".Activity.UploadActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="clip_horizontal"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/buttonBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="?android:textColorPrimary"
+                app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:text="Tạo bài viết"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/buttonSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Đăng" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnerAudience"
+                android:layout_width="170dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/round_border"
+                android:textColor="?android:textColorPrimary" />
+
+            <Button
+                android:id="@+id/buttonImageUpload"
+                android:layout_width="170dp"
+                android:layout_height="35dp"
+                android:background="@drawable/round_border"
+                android:drawableLeft="@drawable/photos"
+                android:stateListAnimator="@null"
+                android:text="Thêm ảnh"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="11dp"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editTextContent"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:gravity="start"
+            android:hint="Bạn đang nghĩ gì?" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabDots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@android:color/transparent"
+            app:tabBackground="@drawable/tab_selector"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPagerImageUpload"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@drawable/background_loading"
+        android:clickable="true"
+        android:translationZ="3dp"
+        android:visibility="invisible">
+
+        <ProgressBar
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
+</FrameLayout>
+

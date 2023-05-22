@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageViewAvatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:srcCompat="@drawable/facebook_logo"
+                app:strokeColor="@android:color/darker_gray"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:id="@+id/textViewUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Người dùng"
+                android:textColor="?android:textColorPrimary" />
+        </LinearLayout>
+
+        <com.example.socialnetwork.Model.ExpandableTextView
+            android:id="@+id/textViewContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="?android:textColorPrimary" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPagerImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_like_facebook" />
+
+                <TextView
+                    android:id="@+id/textViewTotalLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textColor="?android:textColorPrimary" />
+            </LinearLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabDots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp" />
+
+            <TextView
+                android:id="@+id/textViewTotalComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="200 bình luận"
+                android:textColor="?android:textColorPrimary" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonLike"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:drawableLeft="@drawable/ic_thumb_up"
+                    android:stateListAnimator="@null"
+                    android:text="Thích"
+                    android:textColor="?android:textColorPrimary" />
+
+                <Button
+                    android:id="@+id/buttonComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:drawableLeft="@drawable/ic_comment"
+                    android:stateListAnimator="@null"
+                    android:text="Bình luận"
+                    android:textColor="?android:textColorPrimary" />
+            </TableRow>
+
+        </TableLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

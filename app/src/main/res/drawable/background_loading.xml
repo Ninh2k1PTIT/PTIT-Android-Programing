@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Thiết lập màu nền với độ trong suốt -->
+    <solid android:color="#80000000" />
+
+    <!-- Thiết lập góc bo tròn cho layout -->
+    <corners android:radius="8dp" />
+</shape>
