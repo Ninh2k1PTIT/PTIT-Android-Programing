@@ -1,12 +1,12 @@
 package com.example.socialnetwork.Model;
 
-public class JwtResponse {
+public class LoginResponse {
     private String token;
     private Integer id;
     private String username;
     private String email;
 
-    public JwtResponse() {
+    public LoginResponse() {
     }
 
     public String getToken() {

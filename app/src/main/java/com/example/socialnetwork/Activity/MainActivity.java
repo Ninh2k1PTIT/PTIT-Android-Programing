@@ -6,10 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.socialnetwork.Adapter.MainViewPagerAdapter;
@@ -25,17 +22,18 @@ public class MainActivity extends AppCompatActivity {
     private MainViewPagerAdapter mainViewPagerAdapter;
     private FloatingActionButton openUploadButton;
     private TokenManager tokenManager;
-    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         tokenManager = new TokenManager(this);
-        if (tokenManager.get() == null)
+        if (tokenManager.get() == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        else {
+            finish();
+        } else {
+
+            setContentView(R.layout.activity_main);
             initView();
             initEventListener();
         }

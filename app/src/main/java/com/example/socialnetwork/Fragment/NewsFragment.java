@@ -34,7 +34,7 @@ public class NewsFragment extends Fragment {
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
     private BottomNavigationView bottomNavigationView;
-    NestedScrollView nestedScrollView;
+    private NestedScrollView nestedScrollView;
     private TokenManager tokenManager;
     private int page = 0;
     private int totalPage = 0;
@@ -48,6 +48,7 @@ public class NewsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tokenManager = new TokenManager(getActivity());
+        postAdapter = new PostAdapter(getActivity());
     }
 
     @Override
@@ -66,7 +67,6 @@ public class NewsFragment extends Fragment {
 
     private void initView(View view) {
         recyclerView = view.findViewById(R.id.recyclerViewPost);
-        postAdapter = new PostAdapter(getActivity());
         recyclerView.setAdapter(postAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);

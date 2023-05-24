@@ -50,25 +50,31 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinnerAudience"
+            <RelativeLayout
                 android:layout_width="170dp"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/round_border"
-                android:textColor="?android:textColorPrimary" />
+                android:background="@drawable/round_border">
+
+                <Spinner
+                    android:id="@+id/spinnerAudience"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="?android:textColorPrimary" />
+            </RelativeLayout>
+
 
             <Button
                 android:id="@+id/buttonImageUpload"
                 android:layout_width="170dp"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:background="@drawable/round_border"
                 android:drawableLeft="@drawable/photos"
                 android:stateListAnimator="@null"
                 android:text="Thêm ảnh"
                 android:textColor="?android:textColorPrimary"
-                android:textSize="11dp"
+                android:textSize="13dp"
                 app:backgroundTint="@null" />
         </LinearLayout>
 
@@ -104,9 +110,9 @@
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:background="@drawable/background_loading"
         android:clickable="true"
+        android:gravity="center"
         android:translationZ="3dp"
         android:visibility="invisible">
 

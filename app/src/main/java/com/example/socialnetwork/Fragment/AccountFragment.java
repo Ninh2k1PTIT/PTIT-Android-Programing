@@ -43,6 +43,7 @@ public class AccountFragment extends Fragment {
             public void onClick(View view) {
                 tokenManager.remove();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
+                getActivity().finish();
             }
         });
     }

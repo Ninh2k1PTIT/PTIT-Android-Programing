@@ -39,7 +39,7 @@ import retrofit2.Response;
 
 public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<Post> list = new ArrayList<>();
+    private List<Post> resources = new ArrayList<>();
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_LOADING = 2;
     private TokenManager tokenManager;
@@ -49,8 +49,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         tokenManager = new TokenManager(context);
     }
 
-    public void setList(List<Post> list) {
-        this.list = list;
+    public void setList(List<Post> resources) {
+        this.resources = resources;
         notifyDataSetChanged();
     }
 
@@ -70,7 +70,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
         if (payloads.size() > 0) {
             Object[] changes = (Object[]) payloads.get(0);
-            Post post = list.get(position);
+            Post post = resources.get(position);
             PostViewHolder postViewHolder = (PostViewHolder) holder;
             post.setReact((Boolean) changes[0]);
             post.setTotalReact((Integer) changes[1]);
@@ -96,7 +96,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == TYPE_ITEM) {
-            Post post = list.get(position);
+            Post post = resources.get(position);
             PostViewHolder postViewHolder = (PostViewHolder) holder;
             postViewHolder.textViewUsername.setText(post.getUser().getUsername());
             Picasso.get().load(post.getUser().getAvatar()).into(postViewHolder.imageViewAvatar);
@@ -144,7 +144,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             postViewHolder.buttonComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context.getApplicationContext(), CommentActivity.class));
+                    Intent intent = new Intent(context.getApplicationContext(), CommentActivity.class);
+                    intent.putExtra("postId", post.getId());
+                    context.startActivity(intent);
                     ((Activity) context).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay);
                 }
             });
@@ -195,7 +197,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return resources.size();
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder {
@@ -232,21 +234,21 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void addLoadingEffect() {
-        list.add(null);
-        notifyItemInserted(list.size() - 1);
+        resources.add(null);
+        notifyItemInserted(resources.size() - 1);
     }
 
     public void removeLoadingEffect() {
-        int position = list.size() - 1;
-        Post post = list.get(position);
+        int position = resources.size() - 1;
+        Post post = resources.get(position);
         if (post == null) {
-            list.remove(position);
+            resources.remove(position);
             notifyDataSetChanged();
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return list.get(position) == null ? TYPE_LOADING : TYPE_ITEM;
+        return resources.get(position) == null ? TYPE_LOADING : TYPE_ITEM;
     }
 }
