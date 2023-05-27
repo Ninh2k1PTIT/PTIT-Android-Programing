@@ -14,10 +14,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.socialnetwork.Model.GoogleLoginRequest;
-import com.example.socialnetwork.Model.LoginResponse;
 import com.example.socialnetwork.Model.LoginRequest;
+import com.example.socialnetwork.Model.LoginResponse;
 import com.example.socialnetwork.R;
 import com.example.socialnetwork.Service.ApiUtils;
+import com.example.socialnetwork.Service.RequestCodeUtils;
 import com.example.socialnetwork.Service.TokenManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -51,7 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         tokenManager = new TokenManager(this);
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("427947856574-9kuvkbobk276vvq4eude89kvvs7724p7.apps.googleusercontent.com")
+                //Nhập Web OAuth 2.0 Client IDs trên https://console.cloud.google.com/apis/credentials
+                .requestIdToken("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
@@ -100,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             loading.setVisibility(View.INVISIBLE);
                             if (response.code() == 200) {
                                 Toast.makeText(getApplicationContext(), "Chào mừng " + response.body().getUsername(), Toast.LENGTH_SHORT).show();
-                                tokenManager.save(response.body().getToken());
+                                tokenManager.save(response.body().getToken(), response.body().getId(), response.body().getUsername(), response.body().getPhoneNumber(), response.body().getEmail(), response.body().getAvatar(), response.body().getGender());
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
                             } else
@@ -129,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent signInIntent = googleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, 10);
+                startActivityForResult(signInIntent, RequestCodeUtils.LOGIN_GOOGLE);
             }
         });
 
@@ -175,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10) {
+        if (requestCode == RequestCodeUtils.LOGIN_GOOGLE) {
             loading.setVisibility(View.VISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -189,9 +191,11 @@ public class LoginActivity extends AppCompatActivity {
                         loading.setVisibility(View.INVISIBLE);
                         if (response.code() == 200) {
                             Toast.makeText(getApplicationContext(), "Chào mừng " + response.body().getUsername(), Toast.LENGTH_SHORT).show();
-                            tokenManager.save(response.body().getToken());
+                            tokenManager.save(response.body().getToken(), response.body().getId(), response.body().getUsername(), response.body().getPhoneNumber(), response.body().getEmail(), response.body().getAvatar(), response.body().getGender());
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Đã xảy ra lỗi. Vui lòng thử lại", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -204,7 +208,6 @@ public class LoginActivity extends AppCompatActivity {
 
             } catch (ApiException e) {
                 loading.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), "Đã xảy ra lỗi. Vui lòng thử lại", Toast.LENGTH_SHORT).show();
             }
         }
     }

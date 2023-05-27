@@ -12,4 +12,8 @@ public class ApiUtils {
     public static CommentService getCommentService() {
         return ApiClient.getClient().create(CommentService.class);
     }
+
+    public static UserService getUserService() {
+        return ApiClient.getClient().create(UserService.class);
+    }
 }

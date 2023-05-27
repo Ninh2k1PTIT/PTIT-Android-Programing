@@ -5,16 +5,15 @@ public class LoginResponse {
     private Integer id;
     private String username;
     private String email;
+    private String avatar;
+    private String phoneNumber;
+    private String gender;
 
     public LoginResponse() {
     }
 
     public String getToken() {
         return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public Integer getId() {
@@ -39,5 +38,17 @@ public class LoginResponse {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getGender() {
+        return gender;
     }
 }

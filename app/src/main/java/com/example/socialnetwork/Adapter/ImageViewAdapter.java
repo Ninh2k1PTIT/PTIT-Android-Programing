@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.example.socialnetwork.Model.Photo;
 import com.example.socialnetwork.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,27 +20,27 @@ import java.util.List;
 public class ImageViewAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
-    private List<String> resources = new ArrayList<>();
+    private List<Photo> resources = new ArrayList<>();
     private static final int TYPE_VIEWONLY = 1;
     private int viewType;
 
-    public ImageViewAdapter(Context context, List<String> resources, int viewType) {
+    public ImageViewAdapter(Context context, List<Photo> resources, int viewType) {
         this.context = context;
         this.resources = resources;
         this.viewType = viewType;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void addItem(String image) {
-        resources.add(image);
+    public void addItem(Photo photo) {
+        resources.add(photo);
         notifyDataSetChanged();
     }
 
-    public List<String> getResources() {
+    public List<Photo> getResources() {
         return resources;
     }
 
-    public String getItem(int position) {
+    public Photo getItem(int position) {
         return resources.get(position);
     }
 
@@ -60,7 +61,7 @@ public class ImageViewAdapter extends PagerAdapter {
         ImageView imageView = view.findViewById(R.id.imageView);
         ImageButton imageButton = view.findViewById(R.id.imageButtonRemove);
 
-        Picasso.get().load(resources.get(position)).into(imageView);
+        Picasso.get().load(resources.get(position).getContent()).into(imageView);
 
         if (viewType == TYPE_VIEWONLY)
             imageButton.setVisibility(View.GONE);

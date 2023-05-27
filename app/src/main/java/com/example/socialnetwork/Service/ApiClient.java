@@ -14,8 +14,7 @@ public class ApiClient {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://b9cf-42-1-70-119.ngrok-free.app")
-//                .baseUrl("http://10.0.0.2")
+                .baseUrl("http://10.0.0.2")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

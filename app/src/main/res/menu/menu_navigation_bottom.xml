@@ -4,14 +4,6 @@
         android:icon="@drawable/ic_news"
         android:title="Bảng tin" />
     <item
-        android:id="@+id/mContact"
-        android:icon="@drawable/ic_contact"
-        android:title="Liên hệ" />
-    <item
-        android:id="@+id/mNotification"
-        android:icon="@drawable/ic_notifications"
-        android:title="Thông báo" />
-    <item
         android:id="@+id/mAccount"
         android:icon="@drawable/ic_account"
         android:title="Tài khoản" />

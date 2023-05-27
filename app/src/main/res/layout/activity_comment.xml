@@ -7,22 +7,75 @@
     tools:context=".Activity.CommentActivity">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/round_border"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_loading"
+        android:clickable="true"
+        android:gravity="center"
+        android:translationZ="3dp"
+        android:visibility="invisible">
 
-        <Spinner
-            android:id="@+id/spinnerCommentFilter"
+        <ProgressBar
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/comment_filter"
-            android:padding="5dp" />
+            android:indeterminate="true" />
     </RelativeLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/relativeLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/transparent"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/constraintLayout"
+            app:layout_constraintLeft_toLeftOf="@id/constraintLayout"
+            app:layout_constraintTop_toTopOf="@id/constraintLayout"
+            app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/constraintLayout"
+            app:layout_constraintRight_toRightOf="@id/constraintLayout"
+            app:layout_constraintTop_toTopOf="@id/constraintLayout">
+
+            <ImageView
+                android:id="@+id/imageViewPostReact"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_like_facebook" />
+
+            <TextView
+                android:id="@+id/textViewTotalPostReact"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:paddingRight="10dp"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="?android:textColorPrimary" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewComment"
@@ -32,7 +85,7 @@
         app:layout_constraintBottom_toTopOf="@id/comment"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativeLayout" />
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
 
     <LinearLayout
         android:id="@+id/comment"
@@ -51,7 +104,7 @@
             android:hint="Viết bình luận" />
 
         <ImageButton
-            android:id="@+id/imageButtonComment"
+            android:id="@+id/buttonComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"

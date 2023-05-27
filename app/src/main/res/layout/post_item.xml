@@ -12,26 +12,59 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageViewAvatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:padding="5dp"
                 app:shapeAppearanceOverlay="@style/circleImageView"
                 app:srcCompat="@drawable/facebook_logo"
                 app:strokeColor="@android:color/darker_gray"
                 app:strokeWidth="1dp" />
 
-            <TextView
-                android:id="@+id/textViewUsername"
+            <LinearLayout
+                android:layout_weight="5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Người dùng"
-                android:textColor="?android:textColorPrimary" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textViewUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textStyle="bold"
+                    android:textColor="?android:textColorPrimary" />
+
+                <TextView
+                    android:id="@+id/textViewCreatedAt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01/01/2023"
+                    android:textColor="?android:textColorPrimary" />
+            </LinearLayout>
+            <ImageButton
+                android:visibility="invisible"
+                android:layout_weight="1"
+                android:id="@+id/buttonEdit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="?android:textColorPrimary"
+                app:srcCompat="@drawable/ic_edit" />
+            <ImageButton
+                android:visibility="invisible"
+                android:layout_weight="1"
+                android:id="@+id/buttonDelete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="?android:textColorPrimary"
+                app:srcCompat="@drawable/ic_delete" />
         </LinearLayout>
 
         <com.example.socialnetwork.Model.ExpandableTextView

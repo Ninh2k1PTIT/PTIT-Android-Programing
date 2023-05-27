@@ -39,18 +39,6 @@ public class Post {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public EAudience getAudience() {
         return audience;
     }
@@ -61,10 +49,6 @@ public class Post {
 
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Integer getTotalReact() {
@@ -85,10 +69,6 @@ public class Post {
 
     public List<Photo> getPhotos() {
         return photos;
-    }
-
-    public void setPhotos(List<Photo> photos) {
-        this.photos = photos;
     }
 
     public Boolean getReact() {

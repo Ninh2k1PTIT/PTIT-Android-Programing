@@ -80,7 +80,6 @@ public class SignupActivity extends AppCompatActivity {
                         || username.isEmpty()
                         || password.isEmpty()
                         || confirmPassword.isEmpty()
-                        || phone.isEmpty()
                         || !Pattern.compile(EMAIL_PATTERN).matcher(email).matches()
                         || !password.equals(confirmPassword)) {
                     if (email.isEmpty())
@@ -95,8 +94,6 @@ public class SignupActivity extends AppCompatActivity {
                         inputConfirmPassword.setError("Không được để trống");
                     if (!password.equals(confirmPassword))
                         inputConfirmPassword.setError("Chưa khớp với Mật khẩu");
-                    if (phone.isEmpty())
-                        inputPhone.setError("Không được để trống");
                 } else {
                     loading.setVisibility(View.VISIBLE);
                     SignupRequest signupRequest = new SignupRequest();
@@ -203,24 +200,6 @@ public class SignupActivity extends AppCompatActivity {
                 else if (!s.equals(inputPassword.getEditText().getText().toString()))
                     inputConfirmPassword.setError("Chưa khớp với Mật khẩu");
                 else inputConfirmPassword.setError(null);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        inputPhone.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String s = charSequence.toString().trim();
-                if (s.isEmpty())
-                    inputPhone.setError("Không được để trống");
-                else inputPhone.setError(null);
             }
 
             @Override

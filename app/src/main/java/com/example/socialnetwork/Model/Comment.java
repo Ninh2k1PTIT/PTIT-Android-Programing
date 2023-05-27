@@ -6,6 +6,7 @@ public class Comment {
     private Integer id;
     private String content;
     private Integer totalReact;
+    private Boolean isReact;
     private Date createdAt;
     private Date updatedAt;
     private User user;
@@ -38,28 +39,20 @@ public class Comment {
         this.totalReact = totalReact;
     }
 
+    public Boolean getReact() {
+        return isReact;
+    }
+
+    public void setReact(Boolean react) {
+        isReact = react;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Post getPost() {

@@ -23,8 +23,8 @@ import com.example.socialnetwork.Model.EAudience;
 import com.example.socialnetwork.Model.Photo;
 import com.example.socialnetwork.Model.Post;
 import com.example.socialnetwork.R;
-import com.example.socialnetwork.Service.ApiClient;
 import com.example.socialnetwork.Service.ApiUtils;
+import com.example.socialnetwork.Service.RequestCodeUtils;
 import com.example.socialnetwork.Service.TokenManager;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
@@ -34,10 +34,16 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,6 +62,7 @@ public class UploadActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private TokenManager tokenManager;
     int totalPhoto = 0;
+    int postId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,27 @@ public class UploadActivity extends AppCompatActivity {
         imageViewAdapter = new ImageViewAdapter(this, new ArrayList<>(), 0);
         initView();
         initEventListener();
+        Intent intent = getIntent();
+        postId = intent.getIntExtra("postId", 0);
+        if (postId != 0) {
+            ApiUtils.getPostService().getById("Bearer " + tokenManager.getToken(), postId).enqueue(new Callback<Post>() {
+                @Override
+                public void onResponse(Call<Post> call, Response<Post> response) {
+                    Post post = response.body();
+                    editText.setText(post.getContent());
+                    spinner.setSelection(audienceAdapter.getPosition(post.getAudience()));
+                    for (Photo photo : post.getPhotos())
+                        imageViewAdapter.addItem(photo);
+
+                    viewPager.setAdapter(imageViewAdapter);
+                }
+
+                @Override
+                public void onFailure(Call<Post> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     public void initView() {
@@ -97,13 +125,15 @@ public class UploadActivity extends AppCompatActivity {
                         Intent.createChooser(
                                 intent,
                                 "Select Image from here..."),
-                        22);
+                        RequestCodeUtils.CHOOSE_IMAGE);
             }
         });
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
                 finish();
             }
         });
@@ -122,61 +152,121 @@ public class UploadActivity extends AppCompatActivity {
                 post.setContent(editText.getText().toString().trim());
                 post.setAudience(EAudience.valueOf(spinner.getSelectedItem().toString()));
                 totalPhoto = imageViewAdapter.getCount();
-
                 if (totalPhoto == 0)
                     upload(post);
-                else
+                else {
+                    List<Observable<String>> observables = new ArrayList<>();
                     for (int i = 0; i < imageViewAdapter.getCount(); i++) {
-                        StorageReference uploadTask = storageReference.child(UUID.randomUUID().toString());
-                        uploadTask.putFile(Uri.parse(imageViewAdapter.getItem(i))).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                uploadTask.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        totalPhoto--;
-                                        Photo photo = new Photo();
-                                        photo.setContent(String.valueOf(uri));
-                                        post.getPhotos().add(photo);
-                                        if (totalPhoto == 0)
-                                            upload(post);
-                                    }
-                                });
-                            }
-                        });
+                        Photo photo = imageViewAdapter.getItem(i);
+                        if (photo.getId() == null) {
+                            Observable<String> observable =
+                                    Observable.create(new ObservableOnSubscribe<String>() {
+                                        @Override
+                                        public void subscribe(@NonNull ObservableEmitter<String> emitter) throws Throwable {
+                                            StorageReference uploadTask = storageReference.child(UUID.randomUUID().toString());
+                                            uploadTask.putFile(Uri.parse(photo.getContent())).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                    uploadTask.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                        @Override
+                                                        public void onSuccess(Uri uri) {
+                                                            emitter.onNext(String.valueOf(uri));
+                                                            emitter.onComplete();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                            observables.add(observable);
+                        }
+                        else
+                            post.getPhotos().add(photo);
                     }
 
+                    Observable.merge(observables)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<String>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d) {
+
+                                }
+
+                                @Override
+                                public void onNext(@NonNull String s) {
+                                    Photo photo = new Photo();
+                                    photo.setContent(s);
+                                    post.getPhotos().add(photo);
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e) {
+
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    upload(post);
+                                }
+                            });
+                }
             }
         });
     }
 
     public void upload(Post post) {
-        ApiUtils.getPostService().create("Bearer " + tokenManager.get(), post).enqueue(new Callback<Post>() {
-            @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
-                loading.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), "Đăng bài thành công", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+        if (postId == 0)
+            ApiUtils.getPostService().create("Bearer " + tokenManager.getToken(), post).enqueue(new Callback<Post>() {
+                @Override
+                public void onResponse(Call<Post> call, Response<Post> response) {
+                    loading.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(), "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
 
-            @Override
-            public void onFailure(Call<Post> call, Throwable t) {
-                loading.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), "Đã xảy ra lỗi. Vui lòng kiểm tra lại kết nối", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<Post> call, Throwable t) {
+                    loading.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(), "Đã xảy ra lỗi. Vui lòng kiểm tra lại kết nối", Toast.LENGTH_SHORT).show();
+                }
+            });
+        else
+            ApiUtils.getPostService().update("Bearer " + tokenManager.getToken(), post, postId).enqueue(new Callback<Post>() {
+                @Override
+                public void onResponse(Call<Post> call, Response<Post> response) {
+                    loading.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(), "Cập nhật bài viết thành công", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Call<Post> call, Throwable t) {
+                    loading.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(), "Đã xảy ra lỗi. Vui lòng kiểm tra lại kết nối", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 22 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == RequestCodeUtils.CHOOSE_IMAGE && resultCode == RESULT_OK && data != null) {
             if (data.getClipData() != null)
                 for (int i = 0; i < data.getClipData().getItemCount(); i++) {
-                    imageViewAdapter.addItem(data.getClipData().getItemAt(i).getUri().toString());
+                    Photo photo = new Photo();
+                    photo.setContent(data.getClipData().getItemAt(i).getUri().toString());
+                    imageViewAdapter.addItem(photo);
                 }
-            else if (data.getData() != null)
-                imageViewAdapter.addItem(data.getData().toString());
+            else if (data.getData() != null) {
+                Photo photo = new Photo();
+                photo.setContent(data.getData().toString());
+                imageViewAdapter.addItem(photo);
+            }
         }
     }
 

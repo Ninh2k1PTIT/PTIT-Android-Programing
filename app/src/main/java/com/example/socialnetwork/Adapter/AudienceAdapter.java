@@ -12,9 +12,9 @@ import com.example.socialnetwork.Model.EAudience;
 import com.example.socialnetwork.R;
 
 public class AudienceAdapter extends BaseAdapter {
-    private int[] imageList = {R.drawable.ic_baseline_public_24, R.drawable.ic_private, R.drawable.ic_friends};
-    private EAudience[] value = {EAudience.PUBLIC, EAudience.PRIVATE, EAudience.FRIENDS};
-    private String[] name = {"Công khai", "Riêng tư", "Bạn bè"};
+    private int[] imageList = {R.drawable.ic_baseline_public_24, R.drawable.ic_private};
+    private EAudience[] value = {EAudience.PUBLIC, EAudience.PRIVATE};
+    private String[] name = {"Công khai", "Riêng tư"};
     private Context context;
 
     public AudienceAdapter(Context context) {
@@ -33,6 +33,13 @@ public class AudienceAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
+        return 0;
+    }
+
+    public int getPosition(EAudience audience) {
+        for (int i = 0; i < value.length; i++)
+            if (value[i] == audience)
+                return i;
         return 0;
     }
 

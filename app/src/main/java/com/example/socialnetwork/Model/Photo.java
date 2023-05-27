@@ -1,6 +1,7 @@
 package com.example.socialnetwork.Model;
 
 public class Photo {
+    private Integer id;
     private String content;
     private Post post;
 
@@ -21,5 +22,13 @@ public class Photo {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

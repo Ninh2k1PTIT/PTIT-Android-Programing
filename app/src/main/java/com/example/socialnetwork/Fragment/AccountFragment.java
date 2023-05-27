@@ -12,11 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialnetwork.Activity.LoginActivity;
+import com.example.socialnetwork.Activity.ProfileActivity;
 import com.example.socialnetwork.R;
 import com.example.socialnetwork.Service.TokenManager;
 
 public class AccountFragment extends Fragment {
-    LinearLayout logout;
+    LinearLayout logout, info;
     TokenManager tokenManager;
 
     public AccountFragment() {
@@ -44,6 +45,14 @@ public class AccountFragment extends Fragment {
                 tokenManager.remove();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().finish();
+            }
+        });
+
+        info = view.findViewById(R.id.info);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ProfileActivity.class));
             }
         });
     }
